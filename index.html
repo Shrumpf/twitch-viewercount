@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="de"><body>
+<div style="display:flex">
+<img src="twitch.png" style="
+    padding-top: 37px;
+    height: 90px;
+">
+<font color="black" size="256" face="Arial">
+<p id="live"></p>
+</div>
+<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script>
+function getAjax() {
+$.ajax({ 
+	 type: "GET",
+         url:"https://api.twitch.tv/helix/streams/?user_login=USERNAME",
+	 headers: {"Client-ID": "CLIENT-ID", "Authorization": "Bearer AUTH_TOKEN"},
+         dataType:'json',
+         success: function(data) {
+	 var userData = data;
+	 if (data && data.data.length > 0) {
+		 document.getElementById("live").innerHTML=": ".concat(parseInt(data.data[0].viewer_count));
+		 setTimeout(function() { getAjax(); },10000);
+		}
+		else {
+			document.getElementById("live").innerHTML="Offline";
+		 setTimeout(function() { getAjax(); },10000);
+		}
+	}
+     });
+}
+document.addEventListener("DOMContentLoaded", function(event) { 
+  getAjax();
+});
+    
+    </script>
+</font>
+</body>
+</html>
