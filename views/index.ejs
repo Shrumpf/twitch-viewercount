@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #live {
+            color: black;
+            font-size: 47px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="display:flex">
+        <img src="twitch.png" style="
+            padding-top: 37px;
+            height: 90px;
+        ">
+        <p id="live"><%= viewer ? viewer : "Initialization" %></p>
+    </div>
+    <script>
+        setInterval(function () {
+            var requestOptions = {
+                method: 'GET',
+                redirect: 'follow'
+            };
+
+            fetch("/viewer", requestOptions)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.data.length > 0) {
+                        document.getElementById("live").innerHTML = ": ".concat(parseInt(data.data[0].viewer_count));
+                    }
+                    else {
+                        document.getElementById("live").innerHTML = "Offline";
+                    }
+                })
+                .catch(error => {
+                    document.getElementById("live").innerHTML = "Error";
+                });
+        }, 30000);
+    </script>
+</body>
+
+</html>
